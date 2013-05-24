@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.holoeverywhere</groupId>
+	<artifactId>addon-roboguice</artifactId>
+	<version>2.0-SNAPSHOT</version>
+	<packaging>apklib</packaging>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<name>HoloEverywhere Addon Roboguice</name>
+	<description>Roboguice addon for HoloEverywhere library</description>
+	<url>https://github.com/Prototik/HoloEverywhere-Addon-Roboguice</url>
+	<inceptionYear>2013</inceptionYear>
+
+	<scm>
+		<url>https://github.com/Prototik/HoloEverywhere-Addon-Roboguice</url>
+		<connection>scm:git:git://github.com/Prototik/HoloEverywhere-Addon-Roboguice.git</connection>
+		<developerConnection>scm:git:git@github.com:Prototik/HoloEverywhere-Addon-Roboguice.git</developerConnection>
+		<tag>addon-roboguice-2.0</tag>
+	</scm>
+
+	<ciManagement>
+		<system>travis</system>
+		<url>http://travis-ci.org/Prototik/HoloEverywhere-Addon-Roboguice</url>
+	</ciManagement>
+
+	<developers>
+		<developer>
+			<name>Sergey Shatunov</name>
+			<id>Prototik</id>
+			<email>prototypegamez@gmail.com</email>
+			<timezone>+8</timezone>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/Prototik/HoloEverywhere-Addon-Roboguice/issues</url>
+	</issueManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>holoeverywhere-repo</id>
+			<name>HoloEverywhere Repo</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+			<uniqueVersion>true</uniqueVersion>
+		</repository>
+
+		<snapshotRepository>
+			<id>holoeverywhere-repo-snapshots</id>
+			<name>HoloEverywhere Repo Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://raw.github.com/Prototik/HoloEverywhere-Addon-Roboguice/master/LICENSE</url>
+			<distribution>repo</distribution>
+			<comments>Copyright (c) 2013 Sergey Shatunov</comments>
+		</license>
+	</licenses>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.holoeverywhere</groupId>
+			<artifactId>library</artifactId>
+			<type>apklib</type>
+			<version>[1.6.0,)</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<version>${android.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboguice</artifactId>
+			<version>2.0</version>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<android.version>4.1.1.4</android.version>
+		<android-support.version>r13</android-support.version>
+		<android.sdk.platform>16</android.sdk.platform>
+	</properties>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<version>3.5.3</version>
+				<extensions>true</extensions>
+				<configuration>
+					<sign>
+						<debug>false</debug>
+					</sign>
+					<zipalign>
+						<skip>true</skip>
+					</zipalign>
+					<undeployBeforeDeploy>true</undeployBeforeDeploy>
+					<proguard>
+						<skip>true</skip>
+					</proguard>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<tagNameFormat>addon-roboguice-@{project.version}</tagNameFormat>
+					<scmCommentPrefix>Release: </scmCommentPrefix>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.4</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>android-maven-plugin</artifactId>
+						<extensions>true</extensions>
+						<executions>
+							<execution>
+								<id>manifestUpdate</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>manifest-update</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<manifest>
+								<versionName>${project.version}</versionName>
+							</manifest>
+							<sign>
+								<debug>false</debug>
+							</sign>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.7</version>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>${project.build.directory}/${project.artifactId}-${project.version}.jar</file>
+									<type>jar</type>
+								</artifact>
+							</artifacts>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

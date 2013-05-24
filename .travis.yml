@@ -1,0 +1,20 @@
+language: java
+jdk: openjdk7
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    # Your Sonatype login
+    - SONATYPE_USERNAME=prototik
+    # Your Sonatype password, encrypted by 'travis encrypt -r GitHubLogin/Repo SONATYPE_PASSWORD=pass'
+    -   secure: "bCjpXXSENGP/dp6U24+jq2nBg8+mmWAjWCxuJMCvtrc2hFgyYlQgotOwWxPl\nCF2exL5Qgeo4Wck99gJnqhnJvCqFY9cwzf5tnrFrF2lgskNEMhND2jvyj+WC\nj7/xiltBSkwPzNi/4H4XH4V7hOuArdRdxJO4B4gah7YJNihSorE="
+
+notifications:
+  email:
+    - prototypegamez@gmail.com
+
+install: python2 .travis.py
+script: echo Tests skipped
